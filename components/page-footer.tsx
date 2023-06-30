@@ -13,7 +13,7 @@ function PageFooterLink({ href, children, className }: PageFooterLinkProps) {
       href={href}
       target="_blank"
       rel="noreferrer"
-      className={cn('text-gray-300 transition-colors duration-200 hover:text-gray-500', className)}
+      className={cn('text-secondary-foreground transition-colors duration-200', className)}
     >
       {children}
     </a>
@@ -22,7 +22,7 @@ function PageFooterLink({ href, children, className }: PageFooterLinkProps) {
 
 export function PageFooter() {
   return (
-    <footer className="w-full bg-gray-900">
+    <footer className="w-full bg-secondary">
       <div className="mx-auto max-w-screen-xl p-4">
         <div className="mx-auto flex max-w-xs items-center justify-center gap-4 py-4">
           <PageFooterLink href="https://twitter.com/mateussmohamed">
@@ -36,7 +36,7 @@ export function PageFooter() {
           </PageFooterLink>
         </div>
 
-        <div className="flex items-center justify-center text-center font-light text-gray-200">
+        <div className="flex items-center justify-center text-center font-light text-secondary-foreground/90">
           Created with&nbsp;<span aria-label="hear">❤️</span>&nbsp;by&nbsp;
           <PageFooterLink
             className="font-medium underline underline-offset-4"

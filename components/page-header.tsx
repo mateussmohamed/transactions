@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { ModeToggle } from './toggle-theme'
 import { Button } from './ui/button'
 
 export function PageHeader() {
@@ -10,10 +11,14 @@ export function PageHeader() {
   return (
     <header className="py-10 flex justify-between items-center">
       <Link href="/">
-        <h1 className="text-3xl font-bold">Transactions</h1>
+        <h1 className="text-3xl font-bold dark:text-white">Transactions</h1>
       </Link>
-
-      <Button onClick={() => router.push('/accounts/new')}>New Account</Button>
+      <div className="flex gap-5">
+        <Button variant="outline" onClick={() => router.push('/accounts/new')}>
+          New Account
+        </Button>
+        <ModeToggle />
+      </div>
     </header>
   )
 }
