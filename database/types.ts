@@ -18,7 +18,7 @@ export const InsertAccountSchema = createInsertSchema(accounts, {
   })
 })
 
-enum TransferType {
+export enum TransferType {
   Withdraw = 'withdraw',
   Deposit = 'deposit',
   Transfer = 'transfer'

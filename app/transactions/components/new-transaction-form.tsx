@@ -14,7 +14,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useToast } from '@/components/ui/use-toast'
-import { InsertTransactionSchema } from '@/database/types'
+import { InsertTransactionSchema, TransferType } from '@/database/types'
 import { env } from '@/lib/env.mjs'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Select } from '@radix-ui/react-select'
@@ -103,7 +103,10 @@ export function NewTransactionForm({ onDismiss }: NewTransactionFormProps) {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Type</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select
+                onValueChange={(value: TransferType) => form.setValue('type', value)}
+                defaultValue={field.value}
+              >
                 <FormControl>
                   <SelectTrigger className="flex-1">
                     <SelectValue placeholder="Select the transfer type" />
