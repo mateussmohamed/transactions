@@ -26,7 +26,9 @@ export function TransactionFilter({ onSearchParams }: TransactionFilterProps) {
     <section className="flex flex-col gap-6 mb-6">
       <div className="flex justify-between">
         <h3 className="font-bold text-2xl">Search</h3>
-        <Button onClick={() => router.push('/transactions/new')}>New Transaction</Button>
+        <Button variant="outline" onClick={() => router.push('/transactions/new')}>
+          New Transaction
+        </Button>
       </div>
       <div className="flex flex-row gap-4">
         <DatePicker onChange={(createdAt: string) => onSearchParams({ createdAt })} />
