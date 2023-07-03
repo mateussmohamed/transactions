@@ -23,6 +23,8 @@ async function processWithdraw(transaction: Transaction) {
     .update(accounts)
     .set({ balance: fromNewBalance })
     .where(eq(accounts.id, transaction.from))
+
+  return NextResponse.json({}, { status: 200 })
 }
 
 async function processDeposit(transaction: Transaction) {
@@ -38,6 +40,8 @@ async function processDeposit(transaction: Transaction) {
     .update(accounts)
     .set({ balance: fromNewBalance })
     .where(eq(accounts.id, transaction.from))
+
+  return NextResponse.json({}, { status: 200 })
 }
 
 async function processTransfer(transaction: Transaction) {
@@ -46,8 +50,9 @@ async function processTransfer(transaction: Transaction) {
       columns: {
         balance: true
       },
-      where: (table, { eq }) => eq(accounts.id, transaction.from)
+      where: (table, { eq }) => eq(table.id, transaction.from)
     })
+
     const hasntBalance = Number(transaction.amount) > Number(from?.balance)
     if (hasntBalance) {
       return NextResponse.json({ message: 'Insufficient funds', code: 422 }, { status: 422 })
@@ -57,18 +62,18 @@ async function processTransfer(transaction: Transaction) {
       columns: {
         balance: true
       },
-      where: (table, { eq }) => eq(accounts.id, transactions.to)
+      where: (table, { eq }) => eq(table.id, transaction.to!)
     })
 
     await db.insert(transactions).values([
       {
-        type: transaction.type === 'withdraw' ? 'withdraw' : 'deposit',
+        type: 'withdraw',
         amount: transaction.amount,
         from: transaction.from,
         to: transaction.to
       },
       {
-        type: transaction.type === 'withdraw' ? 'deposit' : 'withdraw',
+        type: 'deposit',
         amount: transaction.amount,
         from: transaction.from,
         to: transaction.to
@@ -84,6 +89,8 @@ async function processTransfer(transaction: Transaction) {
       .where(eq(accounts.id, transaction.from))
 
     await db.update(accounts).set({ balance: toNewBalance }).where(eq(accounts.id, transaction.to))
+
+    return NextResponse.json({}, { status: 200 })
   }
 }
 
@@ -103,8 +110,6 @@ export async function POST(request: Request) {
     if (transaction.type === 'transfer') {
       return await processTransfer(transaction)
     }
-
-    return NextResponse.json({}, { status: 200 })
   } catch (error) {
     if (error instanceof Error) {
       //@ts-ignore

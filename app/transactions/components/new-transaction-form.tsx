@@ -39,6 +39,7 @@ export function NewTransactionForm({ onDismiss }: NewTransactionFormProps) {
   const form = useForm<NewTransactionFormSchema>({
     resolver: zodResolver(InsertTransactionSchema)
   })
+  const transferType = form.watch('type')
   const mutation = useMutation({
     mutationFn: (values: NewTransactionFormSchema) => {
       return fetch(`${env.NEXT_PUBLIC_API_URL}/transactions`, {
@@ -83,20 +84,6 @@ export function NewTransactionForm({ onDismiss }: NewTransactionFormProps) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 min-w-[380px]">
-        <FormField
-          control={form.control}
-          name="amount"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Amount</FormLabel>
-              <FormControl>
-                <Input type="number" placeholder="50" autoComplete="off" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
         <FormField
           control={form.control}
           name="type"
@@ -150,22 +137,40 @@ export function NewTransactionForm({ onDismiss }: NewTransactionFormProps) {
           )}
         />
 
+        {transferType === 'transfer' ? (
+          <>
+            <FormField
+              control={form.control}
+              name="to"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>To</FormLabel>
+                  <AccountSearchInput
+                    inputProps={{
+                      id: 'to',
+                      name: 'to',
+                      placeholder: 'Receiver'
+                    }}
+                    onChangeAccount={(value) => {
+                      field.onChange(value)
+                    }}
+                  />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </>
+        ) : null}
+
         <FormField
           control={form.control}
-          name="to"
+          name="amount"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>To</FormLabel>
-              <AccountSearchInput
-                inputProps={{
-                  id: 'to',
-                  name: 'to',
-                  placeholder: 'Receiver'
-                }}
-                onChangeAccount={(value) => {
-                  field.onChange(value)
-                }}
-              />
+              <FormLabel>Amount</FormLabel>
+              <FormControl>
+                <Input type="number" placeholder="50" autoComplete="off" {...field} />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
